@@ -1,26 +1,5 @@
 import React, { useState } from 'react';
-import { Search, ArrowUpDown, LineChart } from 'lucide-react';
 import { CURRENCIES } from '../constants/currencies';
-
-// Mini SVG Sparkline generator
-function MiniSparkline({ isPositive }) {
-  const points = isPositive
-    ? '0,18 8,14 16,16 24,11 32,13 40,7 48,9 56,2'
-    : '0,3 8,6 16,5 24,12 32,10 40,15 48,13 56,19';
-
-  return (
-    <svg className="w-14 h-5 overflow-visible" viewBox="0 0 56 20">
-      <polyline
-        fill="none"
-        stroke={isPositive ? '#059669' : '#e11d48'}
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        points={points}
-      />
-    </svg>
-  );
-}
 
 export default function RatesTable({ rates, base, onSelectTarget, activeTarget }) {
   const [search, setSearch] = useState('');
@@ -31,22 +10,18 @@ export default function RatesTable({ rates, base, onSelectTarget, activeTarget }
     const meta = CURRENCIES[code];
     const rate = rates?.[code] || (code === base ? 1 : 0);
     const inverse = rate > 0 ? 1 / rate : 0;
-    const isUp = ((code.charCodeAt(0) + code.charCodeAt(1)) % 2) === 0;
 
     return {
       code,
       name: meta.name,
       country: meta.country,
-      flag: meta.flag,
       symbol: meta.symbol,
       isPegged: meta.isPeggedToUSD,
       rate,
       inverse,
-      isUp,
     };
   });
 
-  // Filter
   const filtered = currencyList.filter((item) => {
     const q = search.toLowerCase();
     return (
@@ -56,7 +31,6 @@ export default function RatesTable({ rates, base, onSelectTarget, activeTarget }
     );
   });
 
-  // Sort
   const sorted = [...filtered].sort((a, b) => {
     let valA = a[sortField];
     let valB = b[sortField];
@@ -83,19 +57,18 @@ export default function RatesTable({ rates, base, onSelectTarget, activeTarget }
             Comprehensive Currency Directory
           </h3>
           <p className="text-[11px] text-stone-500 font-mono">
-            Full market depth with sparkline trajectories and exchange classifications
+            Full market depth and currency exchange classifications
           </p>
         </div>
 
-        {/* Search Input */}
+        {/* Clean Text Search Input (No Search Icon) */}
         <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search currency, code, nation..."
-            className="w-full glass-input rounded-xl pl-10 pr-3.5 py-1.5 text-xs font-mono text-stone-900 placeholder-stone-400 focus:outline-none"
+            placeholder="Filter by code, name, country..."
+            className="w-full glass-input rounded-xl px-4 py-2 text-xs font-mono text-stone-900 placeholder-stone-400 focus:outline-none"
           />
         </div>
       </div>
@@ -109,30 +82,20 @@ export default function RatesTable({ rates, base, onSelectTarget, activeTarget }
                 onClick={() => toggleSort('code')}
                 className="py-3 px-3 cursor-pointer hover:text-stone-900 transition-colors font-semibold"
               >
-                <div className="flex items-center gap-1.5">
-                  <span>CURRENCY</span>
-                  <ArrowUpDown className="w-3 h-3 text-stone-400" />
-                </div>
+                CURRENCY
               </th>
               <th
                 onClick={() => toggleSort('rate')}
                 className="py-3 px-3 cursor-pointer hover:text-stone-900 transition-colors text-right font-semibold"
               >
-                <div className="flex items-center justify-end gap-1.5">
-                  <span>SPOT RATE (1 {base})</span>
-                  <ArrowUpDown className="w-3 h-3 text-stone-400" />
-                </div>
+                SPOT RATE (1 {base})
               </th>
               <th
                 onClick={() => toggleSort('inverse')}
                 className="py-3 px-3 cursor-pointer hover:text-stone-900 transition-colors text-right hidden sm:table-cell font-semibold"
               >
-                <div className="flex items-center justify-end gap-1.5">
-                  <span>INVERSE (1 UNIT)</span>
-                  <ArrowUpDown className="w-3 h-3 text-stone-400" />
-                </div>
+                INVERSE (1 UNIT)
               </th>
-              <th className="py-3 px-3 text-center hidden md:table-cell font-semibold">7D MOMENTUM</th>
               <th className="py-3 px-3 text-center font-semibold">REGIME</th>
               <th className="py-3 px-3 text-right font-semibold">ACTION</th>
             </tr>
@@ -150,20 +113,17 @@ export default function RatesTable({ rates, base, onSelectTarget, activeTarget }
                   }`}
                 >
                   <td className="py-3 px-3">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{item.flag}</span>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-stone-900">{item.code}</span>
-                          <span className="text-stone-500 text-[10px]">({item.symbol})</span>
-                          {isBase && (
-                            <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 text-[9px] font-bold border border-emerald-300">
-                              BASE
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-[11px] text-stone-500">{item.name} • {item.country}</div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-stone-900">{item.code}</span>
+                        <span className="text-stone-500 text-[10px]">({item.symbol})</span>
+                        {isBase && (
+                          <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 text-[9px] font-bold border border-emerald-300">
+                            BASE
+                          </span>
+                        )}
                       </div>
+                      <div className="text-[11px] text-stone-500">{item.name} • {item.country}</div>
                     </div>
                   </td>
 
@@ -181,19 +141,13 @@ export default function RatesTable({ rates, base, onSelectTarget, activeTarget }
                       : `${item.inverse > 100 ? item.inverse.toFixed(2) : item.inverse.toFixed(4)} ${base}`}
                   </td>
 
-                  <td className="py-3 px-3 text-center hidden md:table-cell">
-                    <div className="flex justify-center">
-                      <MiniSparkline isPositive={item.isUp} />
-                    </div>
-                  </td>
-
                   <td className="py-3 px-3 text-center">
                     {item.isPegged ? (
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-amber-50 text-amber-800 border border-amber-200 font-semibold">
                         USD Peg (3.6725)
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] bg-stone-100 text-stone-600 border border-stone-200">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-stone-100 text-stone-600 border border-stone-200">
                         Free Floating
                       </span>
                     )}
@@ -205,14 +159,13 @@ export default function RatesTable({ rates, base, onSelectTarget, activeTarget }
                     ) : (
                       <button
                         onClick={() => onSelectTarget(item.code)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono transition-all ${
+                        className={`inline-flex items-center px-3 py-1 rounded-xl text-xs font-mono transition-all ${
                           isActive
-                            ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                            ? 'bg-emerald-700 text-white font-bold shadow-xs'
                             : 'bg-white hover:bg-stone-50 text-stone-700 border border-[#ded5c6] hover:border-stone-400 shadow-xs'
                         }`}
                       >
-                        <LineChart className="w-3.5 h-3.5" />
-                        <span>{isActive ? 'Active' : 'Chart'}</span>
+                        {isActive ? 'Active' : 'Chart'}
                       </button>
                     )}
                   </td>

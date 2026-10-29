@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ArrowLeftRight, Calculator, Sparkles, TrendingUp, TrendingDown } from 'lucide-react';
 import { CURRENCIES } from '../constants/currencies';
 
 export default function CurrencyConverter({
@@ -14,7 +13,6 @@ export default function CurrencyConverter({
 
   const numAmount = parseFloat(amount) || 0;
 
-  // Rate calculation
   const getRate = (from, to) => {
     if (from === to) return 1;
     const fromRate = rates?.[from] || 1;
@@ -28,10 +26,9 @@ export default function CurrencyConverter({
   const currentRate = getRate(fromCurr, toCurr);
   const convertedTotal = (numAmount * currentRate).toFixed(2);
 
-  const fromInfo = CURRENCIES[fromCurr] || { flag: '', symbol: fromCurr };
-  const toInfo = CURRENCIES[toCurr] || { flag: '', symbol: toCurr };
+  const fromInfo = CURRENCIES[fromCurr] || { symbol: fromCurr };
+  const toInfo = CURRENCIES[toCurr] || { symbol: toCurr };
 
-  // Swap currencies
   const handleSwap = () => {
     const temp = fromCurr;
     setFromCurr(toCurr);
@@ -45,18 +42,13 @@ export default function CurrencyConverter({
   return (
     <div className="glass-panel rounded-2xl p-5 mb-6 relative overflow-hidden">
       <div className="flex items-center justify-between pb-3.5 border-b border-[#e5decfa6]">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-emerald-100 border border-emerald-200 text-emerald-800">
-            <Calculator className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold font-mono text-stone-900 tracking-tight">
-              Institutional Conversion Engine
-            </h3>
-            <p className="text-[11px] text-stone-500 font-mono">
-              Live zero-spread parity with purchasing power drift analysis
-            </p>
-          </div>
+        <div>
+          <h3 className="text-sm font-bold font-mono text-stone-900 tracking-tight">
+            Institutional Conversion Engine
+          </h3>
+          <p className="text-[11px] text-stone-500 font-mono">
+            Zero-spread parity with purchasing power drift analysis
+          </p>
         </div>
         <span className="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full border border-emerald-300 font-semibold">
           Interbank Parity
@@ -80,25 +72,25 @@ export default function CurrencyConverter({
             <select
               value={fromCurr}
               onChange={(e) => setFromCurr(e.target.value)}
-              className="bg-white text-stone-900 text-xs font-mono py-1.5 px-2.5 rounded-xl border border-[#ded5c6] focus:outline-none cursor-pointer shadow-xs"
+              className="bg-white text-stone-900 text-xs font-mono py-1.5 px-2.5 rounded-xl border border-[#ded5c6] focus:outline-none cursor-pointer shadow-xs font-semibold"
             >
               {Object.keys(CURRENCIES).map((c) => (
                 <option key={c} value={c} className="bg-white text-stone-900">
-                  {CURRENCIES[c].flag} {c}
+                  {c}
                 </option>
               ))}
             </select>
           </div>
         </div>
 
-        {/* Swap Button */}
+        {/* Swap Button (Clean Text) */}
         <div className="md:col-span-1 flex justify-center">
           <button
             onClick={handleSwap}
-            className="p-3 rounded-2xl bg-white hover:bg-emerald-50 text-stone-700 hover:text-emerald-800 border border-[#ded5c6] hover:border-emerald-300 transition-all hover:rotate-180 duration-300 shadow-xs"
+            className="px-3 py-2 rounded-xl bg-white hover:bg-emerald-50 text-stone-700 hover:text-emerald-800 border border-[#ded5c6] hover:border-emerald-300 transition-all text-xs font-mono font-bold shadow-xs"
             title="Invert currency pair"
           >
-            <ArrowLeftRight className="w-4 h-4" />
+            SWAP
           </button>
         </div>
 
@@ -114,11 +106,11 @@ export default function CurrencyConverter({
             <select
               value={toCurr}
               onChange={(e) => setToCurr(e.target.value)}
-              className="bg-white text-stone-900 text-xs font-mono py-1.5 px-2.5 rounded-xl border border-[#ded5c6] focus:outline-none cursor-pointer shadow-xs"
+              className="bg-white text-stone-900 text-xs font-mono py-1.5 px-2.5 rounded-xl border border-[#ded5c6] focus:outline-none cursor-pointer shadow-xs font-semibold"
             >
               {Object.keys(CURRENCIES).map((c) => (
                 <option key={c} value={c} className="bg-white text-stone-900">
-                  {CURRENCIES[c].flag} {c}
+                  {c}
                 </option>
               ))}
             </select>
@@ -142,24 +134,18 @@ export default function CurrencyConverter({
 
       {/* Procurement Timing Drift Model */}
       <div className="mt-4 p-4 rounded-xl bg-[#f0eae0]/80 border border-[#dfd6c6] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
-        <div className="flex items-start gap-3">
-          <div className="p-1.5 rounded-xl bg-emerald-100 text-emerald-800 mt-0.5 border border-emerald-200">
-            <Sparkles className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="font-bold text-stone-900">Procurement & Timing Drift Model</span>
-            <p className="text-stone-600 text-[11px] mt-0.5">
-              1 {fromCurr} = {currentRate.toFixed(4)} {toCurr}.
-              {fromCurr === 'USD' && toCurr === 'AED' ? ' Central Bank Peg eliminates volatility risk completely.' : ''}
-            </p>
-          </div>
+        <div>
+          <span className="font-bold text-stone-900">Procurement & Timing Drift Model</span>
+          <p className="text-stone-600 text-[11px] mt-0.5">
+            1 {fromCurr} = {currentRate.toFixed(4)} {toCurr}.
+            {fromCurr === 'USD' && toCurr === 'AED' ? ' Central Bank Peg eliminates volatility risk completely.' : ''}
+          </p>
         </div>
 
         {fromCurr !== toCurr && (
           <div className="flex items-center gap-2.5 bg-white px-3.5 py-1.5 rounded-xl border border-[#ded5c6] self-stretch sm:self-auto justify-between shadow-xs">
             <span className="text-stone-500 text-[11px] font-semibold">Period Drift:</span>
-            <span className={`font-bold font-mono flex items-center gap-1 ${isPositiveShift ? 'text-emerald-700' : 'text-rose-700'}`}>
-              {isPositiveShift ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+            <span className={`font-bold font-mono ${isPositiveShift ? 'text-emerald-700' : 'text-rose-700'}`}>
               {Math.abs(historicalImpact) > 0 ? `${toInfo.symbol}${Math.abs(historicalImpact).toFixed(2)}` : '0.00'}
             </span>
           </div>

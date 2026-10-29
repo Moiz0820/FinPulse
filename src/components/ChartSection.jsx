@@ -12,7 +12,6 @@ import {
   Filler,
 } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
-import { Download, Sliders, TrendingUp, BarChart2, Activity } from 'lucide-react';
 import { CURRENCIES, MAJOR_PAIRS } from '../constants/currencies';
 
 ChartJS.register(
@@ -42,10 +41,8 @@ export default function ChartSection({
   const points = timeSeriesData?.dataPoints || [];
   const stats = timeSeriesData?.stats || {};
 
-  const baseInfo = CURRENCIES[base] || { symbol: base, flag: '' };
-  const targetInfo = CURRENCIES[target] || { symbol: target, flag: '' };
+  const targetInfo = CURRENCIES[target] || { symbol: target };
 
-  // Calculate daily returns for momentum view
   const pointsWithDelta = points.map((p, idx) => {
     const prevRate = idx > 0 ? points[idx - 1].rate : p.rate;
     const dailyReturn = prevRate ? ((p.rate - prevRate) / prevRate) * 100 : 0;
@@ -64,14 +61,13 @@ export default function ChartSection({
   const smas = points.map((p) => p.sma);
   const dailyReturns = pointsWithDelta.map((p) => p.dailyReturn);
 
-  // Line Chart Dataset for Warm Beige Theme
   const splineData = {
     labels,
     datasets: [
       {
-        label: `${base}/${target} Exchange Rate`,
+        label: `${base}/${target} Rate`,
         data: rates,
-        borderColor: '#059669', // Rich Forest Emerald
+        borderColor: '#059669',
         backgroundColor: (context) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 320);
@@ -92,9 +88,9 @@ export default function ChartSection({
       ...(showSMA
         ? [
             {
-              label: '7-Day SMA Trend',
+              label: '7-Day SMA',
               data: smas,
-              borderColor: '#b45309', // Warm Amber/Bronze (no blue!)
+              borderColor: '#b45309',
               borderWidth: 1.8,
               borderDash: [5, 5],
               pointRadius: 0,
@@ -106,7 +102,6 @@ export default function ChartSection({
     ],
   };
 
-  // Daily Returns / Momentum Bar Dataset
   const momentumData = {
     labels,
     datasets: [
@@ -191,7 +186,6 @@ export default function ChartSection({
     },
   };
 
-  // CSV Export handler
   const handleExportCSV = () => {
     if (!points.length) return;
     const headers = ['Date', 'BaseCurrency', 'TargetCurrency', 'Rate', 'SMA7', 'DailyReturnPercent'];
@@ -224,12 +218,8 @@ export default function ChartSection({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#e5decfa6]">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="text-xl font-black font-mono text-stone-900 tracking-tight flex items-center gap-2">
-              <span className="text-2xl">{baseInfo.flag}</span>
-              <span>{base}</span>
-              <span className="text-stone-400 font-normal">/</span>
-              <span className="text-2xl">{targetInfo.flag}</span>
-              <span>{target}</span>
+            <span className="text-xl font-black font-mono text-stone-900 tracking-tight">
+              {base} / {target}
             </span>
 
             <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-semibold border border-emerald-300">
@@ -237,7 +227,7 @@ export default function ChartSection({
             </span>
           </div>
           <p className="text-xs text-stone-500 mt-1 font-mono">
-            High-fidelity tick stream • Technical trajectory & momentum analyzer
+            Tick stream trajectory and momentum analysis
           </p>
         </div>
 
@@ -247,25 +237,23 @@ export default function ChartSection({
           <div className="flex items-center bg-[#efeae0] p-1 rounded-xl border border-[#ded5c6]">
             <button
               onClick={() => setChartMode('spline')}
-              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-lg transition-all ${
+              className={`px-3 py-1 text-xs font-mono rounded-lg transition-all ${
                 chartMode === 'spline'
-                  ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                  ? 'bg-emerald-700 text-white font-bold shadow-xs'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
-              <Activity className="w-3.5 h-3.5" />
-              <span>Spline Wave</span>
+              Spline View
             </button>
             <button
               onClick={() => setChartMode('momentum')}
-              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-lg transition-all ${
+              className={`px-3 py-1 text-xs font-mono rounded-lg transition-all ${
                 chartMode === 'momentum'
-                  ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                  ? 'bg-emerald-700 text-white font-bold shadow-xs'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
-              <BarChart2 className="w-3.5 h-3.5" />
-              <span>Daily Delta</span>
+              Momentum Bars
             </button>
           </div>
 
@@ -290,50 +278,44 @@ export default function ChartSection({
           {chartMode === 'spline' && (
             <button
               onClick={() => setShowSMA(!showSMA)}
-              className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono rounded-xl border transition-all ${
+              className={`px-2.5 py-1.5 text-xs font-mono rounded-xl border transition-all ${
                 showSMA
                   ? 'bg-amber-100 text-amber-900 border-amber-300 font-semibold'
                   : 'bg-white/60 text-stone-500 border-[#ded5c6] hover:text-stone-800'
               }`}
-              title="Toggle 7-day Simple Moving Average trendline"
             >
-              <Sliders className="w-3.5 h-3.5" />
-              <span>SMA-7</span>
+              SMA-7
             </button>
           )}
 
           {/* Export CSV button */}
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-xl bg-white/90 hover:bg-white text-stone-800 border border-[#ded5c6] transition-all hover:border-emerald-600/40 shadow-xs"
-            title="Export time series to CSV for Excel/PowerBI"
+            className="px-3.5 py-1.5 text-xs font-mono rounded-xl bg-white/90 hover:bg-white text-stone-800 border border-[#ded5c6] transition-all hover:border-emerald-600/40 shadow-xs font-medium"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-600" />
-            <span>CSV</span>
+            Export CSV
           </button>
         </div>
       </div>
 
       {/* Target Currency Quick-Tabs */}
       <div className="flex items-center gap-2 py-3 overflow-x-auto no-scrollbar border-b border-[#e5decfa6]">
-        <span className="text-[11px] font-mono text-stone-500 mr-1 flex items-center gap-1 uppercase tracking-wider font-semibold">
-          <TrendingUp className="w-3 h-3 text-emerald-600" /> Target:
+        <span className="text-[11px] font-mono text-stone-500 mr-1 uppercase tracking-wider font-semibold">
+          Target:
         </span>
         {MAJOR_PAIRS.filter((c) => c !== base).map((currCode) => {
-          const info = CURRENCIES[currCode] || { flag: '' };
           const isActive = target === currCode;
           return (
             <button
               key={currCode}
               onClick={() => onTargetChange(currCode)}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono whitespace-nowrap transition-all ${
+              className={`px-3 py-1 rounded-xl text-xs font-mono whitespace-nowrap transition-all ${
                 isActive
                   ? 'bg-stone-900 text-white font-bold shadow-xs'
                   : 'bg-white/80 text-stone-700 hover:text-stone-900 border border-[#ded5c6] hover:border-stone-400'
               }`}
             >
-              <span>{info.flag}</span>
-              <span>{currCode}</span>
+              {currCode}
             </button>
           );
         })}
@@ -365,10 +347,7 @@ export default function ChartSection({
       <div className="h-72 sm:h-80 w-full mt-2 relative">
         {loading ? (
           <div className="absolute inset-0 flex items-center justify-center bg-[#f7f4ee]/70 backdrop-blur-xs rounded-2xl z-20">
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
-              <span className="text-xs font-mono text-stone-600">Synchronizing market history...</span>
-            </div>
+            <span className="text-xs font-mono text-stone-600">Synchronizing market history...</span>
           </div>
         ) : null}
 

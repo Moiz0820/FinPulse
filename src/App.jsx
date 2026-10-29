@@ -9,7 +9,6 @@ import RatesTable from './components/RatesTable';
 import Footer from './components/Footer';
 import { fetchLatestRates, fetchTimeSeries } from './services/api';
 import { CURRENCIES, MAJOR_PAIRS } from './constants/currencies';
-import { Coins } from 'lucide-react';
 
 export default function App() {
   const [base, setBase] = useState('USD');
@@ -95,26 +94,19 @@ export default function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
         {/* Terminal Sub-header & Base Currency Command Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel p-4.5 rounded-2xl mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-amber-600 p-[1.5px] shadow-xs">
-              <div className="w-full h-full bg-[#fdfbf7] rounded-[10px] p-2">
-                <Coins className="w-5 h-5 text-emerald-700" />
-              </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-stone-500 font-semibold">
+                TERMINAL BASE ANCHOR
+              </span>
+              <span className="px-2 py-0.2 rounded-full bg-emerald-100 text-[10px] font-mono text-emerald-800 border border-emerald-300 font-semibold">
+                {latestData?.date ? `Sync: ${latestData.date}` : 'Real-time Feed'}
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-stone-500 font-semibold">
-                  TERMINAL BASE ANCHOR
-                </span>
-                <span className="px-2 py-0.2 rounded-full bg-emerald-100 text-[10px] font-mono text-emerald-800 border border-emerald-300 font-semibold">
-                  {latestData?.date ? `Sync: ${latestData.date}` : 'Real-time Feed'}
-                </span>
-              </div>
-              <h2 className="text-base font-bold font-mono text-stone-900 mt-0.5">
-                Base Currency: <span className="text-emerald-700 font-extrabold">{CURRENCIES[base]?.flag} {base}</span>
-                <span className="text-xs font-normal text-stone-500 ml-2">({CURRENCIES[base]?.name})</span>
-              </h2>
-            </div>
+            <h2 className="text-base font-bold font-mono text-stone-900 mt-0.5">
+              Base Currency: <span className="text-emerald-800 font-extrabold">{base}</span>
+              <span className="text-xs font-normal text-stone-500 ml-2">({CURRENCIES[base]?.name})</span>
+            </h2>
           </div>
 
           {/* Quick Base Currency Switcher Tabs */}
@@ -123,7 +115,6 @@ export default function App() {
               Set Base:
             </span>
             {MAJOR_PAIRS.map((curr) => {
-              const meta = CURRENCIES[curr];
               const isCurrent = base === curr;
               return (
                 <button
@@ -134,14 +125,13 @@ export default function App() {
                     }
                     setBase(curr);
                   }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${
                     isCurrent
                       ? 'bg-stone-900 text-white font-bold shadow-xs'
                       : 'bg-white/80 text-stone-700 hover:text-stone-900 border border-[#ded5c6] hover:border-stone-400'
                   }`}
                 >
-                  <span>{meta?.flag}</span>
-                  <span>{curr}</span>
+                  {curr}
                 </button>
               );
             })}
@@ -156,7 +146,7 @@ export default function App() {
           activeStats={timeSeriesData?.stats}
         />
 
-        {/* 2. Interactive Chart Section (Spline Wave + Daily Delta Momentum) */}
+        {/* 2. Interactive Chart Section */}
         <ChartSection
           base={base}
           target={target}
