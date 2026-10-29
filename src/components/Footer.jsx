@@ -12,15 +12,15 @@ function GithubIcon(props) {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-800/80 bg-slate-950/80 py-8 px-4 text-xs font-mono text-slate-500">
+    <footer className="border-t border-white/[0.08] bg-[#030712]/90 backdrop-blur-2xl py-8 px-4 text-xs font-mono text-slate-400 relative z-20">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-slate-300 font-bold mb-1">
+          <div className="flex items-center gap-2 text-slate-200 font-bold mb-1">
             <Code2 className="w-4 h-4 text-emerald-400" />
-            <span>FinPulse Terminal v1.0.0</span>
+            <span>FinPulse Terminal • v1.1.0 Institutional Edition</span>
           </div>
-          <p className="text-[11px] text-slate-500">
-            Engineered by Moiz Anwar • Open-source financial intelligence system powered by official ECB reference feeds via Frankfurter API.
+          <p className="text-[11px] text-slate-400">
+            Engineered by Moiz Anwar • High-frequency foreign exchange terminal powered by European Central Bank feeds via Frankfurter API.
           </p>
         </div>
 
@@ -29,9 +29,9 @@ export default function Footer() {
             href="https://github.com/Moiz0820"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 hover:text-white transition-colors"
           >
-            <GithubIcon className="w-3.5 h-3.5" />
+            <GithubIcon className="w-3.5 h-3.5 text-emerald-400" />
             <span>Moiz Anwar</span>
           </a>
           <span>•</span>
@@ -39,7 +39,7 @@ export default function Footer() {
             href="https://api.frankfurter.dev/v1/latest"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 hover:text-emerald-400 transition-colors"
+            className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors"
           >
             <Globe className="w-3.5 h-3.5" />
             <span>ECB Stream</span>
