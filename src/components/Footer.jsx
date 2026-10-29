@@ -12,26 +12,26 @@ function GithubIcon(props) {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#030712]/90 backdrop-blur-2xl py-8 px-4 text-xs font-mono text-slate-400 relative z-20">
+    <footer className="border-t border-[#dfd6c6] bg-[#ede7dc]/90 py-8 px-4 text-xs font-mono text-stone-600 relative z-20">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-slate-200 font-bold mb-1">
-            <Code2 className="w-4 h-4 text-emerald-400" />
-            <span>FinPulse Terminal • v1.1.0 Institutional Edition</span>
+          <div className="flex items-center gap-2 text-stone-800 font-bold mb-1">
+            <Code2 className="w-4 h-4 text-emerald-700" />
+            <span>FinPulse Terminal • Institutional Edition</span>
           </div>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-stone-500">
             Engineered by Moiz Anwar • High-frequency foreign exchange terminal powered by European Central Bank feeds via Frankfurter API.
           </p>
         </div>
 
-        <div className="flex items-center gap-4 text-slate-400">
+        <div className="flex items-center gap-4 text-stone-600">
           <a
             href="https://github.com/Moiz0820"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-white transition-colors"
+            className="flex items-center gap-1 hover:text-stone-900 transition-colors"
           >
-            <GithubIcon className="w-3.5 h-3.5 text-emerald-400" />
+            <GithubIcon className="w-3.5 h-3.5 text-emerald-700" />
             <span>Moiz Anwar</span>
           </a>
           <span>•</span>
@@ -39,7 +39,7 @@ export default function Footer() {
             href="https://api.frankfurter.dev/v1/latest"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors"
+            className="flex items-center gap-1 hover:text-emerald-700 transition-colors"
           >
             <Globe className="w-3.5 h-3.5" />
             <span>ECB Stream</span>

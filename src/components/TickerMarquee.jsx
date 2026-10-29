@@ -10,7 +10,6 @@ export default function TickerMarquee({ rates, base }) {
   const items = keyPairs.map((code) => {
     const meta = CURRENCIES[code] || { flag: '', symbol: '' };
     const rate = rates[code] || 1;
-    // Synthetic slight shift for ticker feel
     const pseudoChange = ((code.charCodeAt(0) % 5) - 2) * 0.15;
     const isUp = pseudoChange >= 0;
 
@@ -23,22 +22,21 @@ export default function TickerMarquee({ rates, base }) {
     };
   });
 
-  // Duplicate list to achieve continuous loop
   const marqueeList = [...items, ...items];
 
   return (
-    <div className="w-full bg-[#050914]/80 border-y border-white/[0.06] overflow-hidden py-1.5 backdrop-blur-md select-none">
+    <div className="w-full bg-[#eee8dc] border-y border-[#dfd6c6] overflow-hidden py-1.5 backdrop-blur-md select-none">
       <div className="animate-marquee flex items-center gap-8">
         {marqueeList.map((item, index) => (
           <div key={`${item.code}-${index}`} className="flex items-center gap-2 font-mono text-xs whitespace-nowrap">
             <span className="text-base">{item.meta.flag}</span>
-            <span className="font-bold text-slate-200">{base}/{item.code}</span>
-            <span className="text-slate-100 font-semibold">{item.rate}</span>
+            <span className="font-bold text-stone-800">{base}/{item.code}</span>
+            <span className="text-stone-900 font-semibold">{item.rate}</span>
             <span
-              className={`flex items-center text-[10px] px-1 py-0.2 rounded ${
+              className={`flex items-center text-[10px] font-semibold px-1 py-0.2 rounded ${
                 item.isUp
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                  : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                  ? 'bg-emerald-100/80 text-emerald-800 border border-emerald-300'
+                  : 'bg-rose-100/80 text-rose-800 border border-rose-300'
               }`}
             >
               {item.isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}

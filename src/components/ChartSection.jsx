@@ -12,7 +12,7 @@ import {
   Filler,
 } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
-import { Download, Sliders, TrendingUp, BarChart2, Activity, Maximize2, ShieldAlert } from 'lucide-react';
+import { Download, Sliders, TrendingUp, BarChart2, Activity } from 'lucide-react';
 import { CURRENCIES, MAJOR_PAIRS } from '../constants/currencies';
 
 ChartJS.register(
@@ -55,7 +55,6 @@ export default function ChartSection({
     };
   });
 
-  // Prepare chart labels
   const labels = points.map((p) => {
     const parts = p.date.split('-');
     return `${parts[1]}/${parts[2]}`;
@@ -65,20 +64,20 @@ export default function ChartSection({
   const smas = points.map((p) => p.sma);
   const dailyReturns = pointsWithDelta.map((p) => p.dailyReturn);
 
-  // Line Chart Dataset
+  // Line Chart Dataset for Warm Beige Theme
   const splineData = {
     labels,
     datasets: [
       {
         label: `${base}/${target} Exchange Rate`,
         data: rates,
-        borderColor: '#10b981', // electric emerald
+        borderColor: '#059669', // Rich Forest Emerald
         backgroundColor: (context) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 320);
-          gradient.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
-          gradient.addColorStop(0.6, 'rgba(16, 185, 129, 0.08)');
-          gradient.addColorStop(1, 'rgba(16, 185, 129, 0.00)');
+          gradient.addColorStop(0, 'rgba(5, 150, 105, 0.22)');
+          gradient.addColorStop(0.7, 'rgba(5, 150, 105, 0.04)');
+          gradient.addColorStop(1, 'rgba(247, 244, 238, 0.00)');
           return gradient;
         },
         fill: true,
@@ -86,7 +85,7 @@ export default function ChartSection({
         borderWidth: 2.2,
         pointRadius: points.length > 50 ? 0 : 2.5,
         pointHoverRadius: 6,
-        pointHoverBackgroundColor: '#10b981',
+        pointHoverBackgroundColor: '#059669',
         pointHoverBorderColor: '#ffffff',
         pointHoverBorderWidth: 2,
       },
@@ -95,7 +94,7 @@ export default function ChartSection({
             {
               label: '7-Day SMA Trend',
               data: smas,
-              borderColor: '#06b6d4', // neon cyan
+              borderColor: '#b45309', // Warm Amber/Bronze (no blue!)
               borderWidth: 1.8,
               borderDash: [5, 5],
               pointRadius: 0,
@@ -115,9 +114,9 @@ export default function ChartSection({
         label: 'Daily Return (%)',
         data: dailyReturns,
         backgroundColor: dailyReturns.map((v) =>
-          v >= 0 ? 'rgba(16, 185, 129, 0.85)' : 'rgba(244, 63, 94, 0.85)'
+          v >= 0 ? 'rgba(5, 150, 105, 0.85)' : 'rgba(225, 29, 72, 0.85)'
         ),
-        borderColor: dailyReturns.map((v) => (v >= 0 ? '#10b981' : '#f43f5e')),
+        borderColor: dailyReturns.map((v) => (v >= 0 ? '#059669' : '#e11d48')),
         borderWidth: 1,
         borderRadius: 3,
       },
@@ -136,7 +135,7 @@ export default function ChartSection({
         position: 'top',
         align: 'end',
         labels: {
-          color: '#94a3b8',
+          color: '#57534e',
           font: { family: 'ui-monospace, monospace', size: 11 },
           boxWidth: 10,
           boxHeight: 10,
@@ -144,10 +143,10 @@ export default function ChartSection({
         },
       },
       tooltip: {
-        backgroundColor: 'rgba(3, 7, 18, 0.92)',
-        titleColor: '#e2e8f0',
-        bodyColor: '#f8fafc',
-        borderColor: 'rgba(255, 255, 255, 0.12)',
+        backgroundColor: 'rgba(28, 25, 23, 0.94)',
+        titleColor: '#e7e5e4',
+        bodyColor: '#fafaf9',
+        borderColor: 'rgba(214, 206, 191, 0.3)',
         borderWidth: 1,
         padding: 12,
         cornerRadius: 10,
@@ -168,11 +167,11 @@ export default function ChartSection({
     scales: {
       x: {
         grid: {
-          color: 'rgba(255, 255, 255, 0.04)',
+          color: 'rgba(180, 160, 135, 0.16)',
           drawBorder: false,
         },
         ticks: {
-          color: '#64748b',
+          color: '#78716c',
           font: { family: 'ui-monospace, monospace', size: 10 },
           maxRotation: 0,
           autoSkip: true,
@@ -181,11 +180,11 @@ export default function ChartSection({
       },
       y: {
         grid: {
-          color: 'rgba(255, 255, 255, 0.04)',
+          color: 'rgba(180, 160, 135, 0.16)',
           drawBorder: false,
         },
         ticks: {
-          color: '#64748b',
+          color: '#78716c',
           font: { family: 'ui-monospace, monospace', size: 10 },
         },
       },
@@ -221,26 +220,23 @@ export default function ChartSection({
 
   return (
     <div className="glass-panel rounded-2xl p-5 mb-6 relative overflow-hidden">
-      {/* Background ambient lighting aura */}
-      <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-
       {/* Top Header & Interactive Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/[0.07] relative z-10">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#e5decfa6]">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="text-xl font-black font-mono text-white tracking-tight flex items-center gap-2">
+            <span className="text-xl font-black font-mono text-stone-900 tracking-tight flex items-center gap-2">
               <span className="text-2xl">{baseInfo.flag}</span>
               <span>{base}</span>
-              <span className="text-slate-500 font-normal">/</span>
+              <span className="text-stone-400 font-normal">/</span>
               <span className="text-2xl">{targetInfo.flag}</span>
               <span>{target}</span>
             </span>
 
-            <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-mono font-semibold border border-emerald-500/25">
+            <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-semibold border border-emerald-300">
               ECB Spot Stream
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1 font-mono">
+          <p className="text-xs text-stone-500 mt-1 font-mono">
             High-fidelity tick stream • Technical trajectory & momentum analyzer
           </p>
         </div>
@@ -248,13 +244,13 @@ export default function ChartSection({
         {/* Action Controls Deck */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Chart View Mode Switcher */}
-          <div className="flex items-center bg-white/[0.03] p-1 rounded-xl border border-white/[0.08]">
+          <div className="flex items-center bg-[#efeae0] p-1 rounded-xl border border-[#ded5c6]">
             <button
               onClick={() => setChartMode('spline')}
               className={`flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-lg transition-all ${
                 chartMode === 'spline'
-                  ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                  : 'text-stone-600 hover:text-stone-900'
               }`}
             >
               <Activity className="w-3.5 h-3.5" />
@@ -264,8 +260,8 @@ export default function ChartSection({
               onClick={() => setChartMode('momentum')}
               className={`flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-lg transition-all ${
                 chartMode === 'momentum'
-                  ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                  : 'text-stone-600 hover:text-stone-900'
               }`}
             >
               <BarChart2 className="w-3.5 h-3.5" />
@@ -274,15 +270,15 @@ export default function ChartSection({
           </div>
 
           {/* Timeframe pill selector */}
-          <div className="flex items-center bg-white/[0.03] p-1 rounded-xl border border-white/[0.08]">
+          <div className="flex items-center bg-[#efeae0] p-1 rounded-xl border border-[#ded5c6]">
             {timeframes.map((tf) => (
               <button
                 key={tf}
                 onClick={() => onTimeframeChange(tf)}
                 className={`px-2.5 py-1 text-xs font-mono rounded-lg transition-all ${
                   timeframe === tf
-                    ? 'bg-white/10 text-white font-bold border border-white/20'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-white text-stone-900 font-bold shadow-xs border border-[#ded5c6]'
+                    : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
                 {tf}
@@ -290,14 +286,14 @@ export default function ChartSection({
             ))}
           </div>
 
-          {/* SMA toggle (active in spline mode) */}
+          {/* SMA toggle */}
           {chartMode === 'spline' && (
             <button
               onClick={() => setShowSMA(!showSMA)}
               className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono rounded-xl border transition-all ${
                 showSMA
-                  ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30'
-                  : 'bg-white/[0.02] text-slate-500 border-white/[0.06] hover:text-slate-300'
+                  ? 'bg-amber-100 text-amber-900 border-amber-300 font-semibold'
+                  : 'bg-white/60 text-stone-500 border-[#ded5c6] hover:text-stone-800'
               }`}
               title="Toggle 7-day Simple Moving Average trendline"
             >
@@ -309,19 +305,19 @@ export default function ChartSection({
           {/* Export CSV button */}
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-xl bg-white/[0.03] hover:bg-white/[0.07] text-slate-200 border border-white/[0.09] transition-all hover:border-emerald-500/40"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-xl bg-white/90 hover:bg-white text-stone-800 border border-[#ded5c6] transition-all hover:border-emerald-600/40 shadow-xs"
             title="Export time series to CSV for Excel/PowerBI"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            <Download className="w-3.5 h-3.5 text-emerald-600" />
             <span>CSV</span>
           </button>
         </div>
       </div>
 
       {/* Target Currency Quick-Tabs */}
-      <div className="flex items-center gap-2 py-3 overflow-x-auto no-scrollbar border-b border-white/[0.05] relative z-10">
-        <span className="text-[11px] font-mono text-slate-400 mr-1 flex items-center gap-1 uppercase tracking-wider">
-          <TrendingUp className="w-3 h-3 text-emerald-400" /> Target:
+      <div className="flex items-center gap-2 py-3 overflow-x-auto no-scrollbar border-b border-[#e5decfa6]">
+        <span className="text-[11px] font-mono text-stone-500 mr-1 flex items-center gap-1 uppercase tracking-wider font-semibold">
+          <TrendingUp className="w-3 h-3 text-emerald-600" /> Target:
         </span>
         {MAJOR_PAIRS.filter((c) => c !== base).map((currCode) => {
           const info = CURRENCIES[currCode] || { flag: '' };
@@ -332,8 +328,8 @@ export default function ChartSection({
               onClick={() => onTargetChange(currCode)}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono whitespace-nowrap transition-all ${
                 isActive
-                  ? 'bg-white/[0.12] text-white font-bold border border-emerald-500/40 shadow-[0_0_15px_-3px_rgba(16,185,129,0.25)]'
-                  : 'bg-white/[0.02] text-slate-400 hover:text-white border border-white/[0.06] hover:border-white/[0.15]'
+                  ? 'bg-stone-900 text-white font-bold shadow-xs'
+                  : 'bg-white/80 text-stone-700 hover:text-stone-900 border border-[#ded5c6] hover:border-stone-400'
               }`}
             >
               <span>{info.flag}</span>
@@ -343,35 +339,35 @@ export default function ChartSection({
         })}
       </div>
 
-      {/* Floating High / Low Watermark Metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-3 font-mono text-xs relative z-10">
+      {/* High / Low Watermark Metrics */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-3 font-mono text-xs">
         <div className="glass-card rounded-xl p-2.5 flex items-center justify-between">
-          <span className="text-slate-400 text-[10px] uppercase">Period Low</span>
-          <span className="text-rose-400 font-bold">{stats.min || '—'} {targetInfo.symbol}</span>
+          <span className="text-stone-500 text-[10px] uppercase font-semibold">Period Low</span>
+          <span className="text-rose-700 font-bold">{stats.min || '—'} {targetInfo.symbol}</span>
         </div>
         <div className="glass-card rounded-xl p-2.5 flex items-center justify-between">
-          <span className="text-slate-400 text-[10px] uppercase">Period High</span>
-          <span className="text-emerald-400 font-bold">{stats.max || '—'} {targetInfo.symbol}</span>
+          <span className="text-stone-500 text-[10px] uppercase font-semibold">Period High</span>
+          <span className="text-emerald-700 font-bold">{stats.max || '—'} {targetInfo.symbol}</span>
         </div>
         <div className="glass-card rounded-xl p-2.5 flex items-center justify-between">
-          <span className="text-slate-400 text-[10px] uppercase">Mean Avg</span>
-          <span className="text-slate-200 font-bold">{stats.avg || '—'} {targetInfo.symbol}</span>
+          <span className="text-stone-500 text-[10px] uppercase font-semibold">Mean Avg</span>
+          <span className="text-stone-900 font-bold">{stats.avg || '—'} {targetInfo.symbol}</span>
         </div>
         <div className="glass-card rounded-xl p-2.5 flex items-center justify-between">
-          <span className="text-slate-400 text-[10px] uppercase">Net Shift</span>
-          <span className={`font-bold ${stats.change >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+          <span className="text-stone-500 text-[10px] uppercase font-semibold">Net Shift</span>
+          <span className={`font-bold ${stats.change >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
             {stats.change > 0 ? `+${stats.change}%` : `${stats.change || 0}%`}
           </span>
         </div>
       </div>
 
       {/* Chart Canvas */}
-      <div className="h-72 sm:h-80 w-full mt-2 relative z-10">
+      <div className="h-72 sm:h-80 w-full mt-2 relative">
         {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#030712]/60 backdrop-blur-md rounded-2xl z-20">
+          <div className="absolute inset-0 flex items-center justify-center bg-[#f7f4ee]/70 backdrop-blur-xs rounded-2xl z-20">
             <div className="flex flex-col items-center gap-2">
-              <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(16,185,129,0.4)]" />
-              <span className="text-xs font-mono text-slate-300">Synchronizing market history...</span>
+              <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+              <span className="text-xs font-mono text-stone-600">Synchronizing market history...</span>
             </div>
           </div>
         ) : null}

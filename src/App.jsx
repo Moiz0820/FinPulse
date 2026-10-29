@@ -9,7 +9,7 @@ import RatesTable from './components/RatesTable';
 import Footer from './components/Footer';
 import { fetchLatestRates, fetchTimeSeries } from './services/api';
 import { CURRENCIES, MAJOR_PAIRS } from './constants/currencies';
-import { Coins, Sparkles } from 'lucide-react';
+import { Coins } from 'lucide-react';
 
 export default function App() {
   const [base, setBase] = useState('USD');
@@ -79,11 +79,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030508] text-slate-100 flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-200 relative overflow-x-hidden">
-      {/* Ambient background light orbs for true glass depth */}
-      <div className="fixed top-[-10%] left-[-5%] w-[600px] h-[600px] bg-emerald-500/[0.07] rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="fixed top-[30%] right-[-10%] w-[650px] h-[650px] bg-purple-600/[0.06] rounded-full blur-[160px] pointer-events-none z-0" />
-      <div className="fixed bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-cyan-500/[0.05] rounded-full blur-[150px] pointer-events-none z-0" />
+    <div className="min-h-screen bg-[#f7f4ee] text-stone-900 flex flex-col font-sans selection:bg-emerald-500/20 selection:text-emerald-900 relative overflow-x-hidden">
+      {/* Ambient background warm glows */}
+      <div className="fixed top-[-10%] left-[-5%] w-[600px] h-[600px] bg-[#ebe1cf]/60 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="fixed top-[30%] right-[-10%] w-[650px] h-[650px] bg-[#ebd8c1]/45 rounded-full blur-[160px] pointer-events-none z-0" />
+      <div className="fixed bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-[#dbe8dc]/40 rounded-full blur-[150px] pointer-events-none z-0" />
 
       {/* 1. Header */}
       <Header />
@@ -96,28 +96,32 @@ export default function App() {
         {/* Terminal Sub-header & Base Currency Command Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel p-4.5 rounded-2xl mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 p-[1.5px] shadow-[0_0_15px_rgba(16,185,129,0.25)]">
-              <div className="w-full h-full bg-[#050914] rounded-[10px] p-2">
-                <Coins className="w-5 h-5 text-emerald-400" />
+            <div className="p-2.5 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-amber-600 p-[1.5px] shadow-xs">
+              <div className="w-full h-full bg-[#fdfbf7] rounded-[10px] p-2">
+                <Coins className="w-5 h-5 text-emerald-700" />
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">TERMINAL BASE ANCHOR</span>
-                <span className="px-2 py-0.2 rounded-full bg-emerald-500/10 text-[10px] font-mono text-emerald-400 border border-emerald-500/30 font-semibold">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-stone-500 font-semibold">
+                  TERMINAL BASE ANCHOR
+                </span>
+                <span className="px-2 py-0.2 rounded-full bg-emerald-100 text-[10px] font-mono text-emerald-800 border border-emerald-300 font-semibold">
                   {latestData?.date ? `Sync: ${latestData.date}` : 'Real-time Feed'}
                 </span>
               </div>
-              <h2 className="text-base font-bold font-mono text-white mt-0.5">
-                Base Currency: <span className="text-emerald-400 font-extrabold">{CURRENCIES[base]?.flag} {base}</span>
-                <span className="text-xs font-normal text-slate-400 ml-2">({CURRENCIES[base]?.name})</span>
+              <h2 className="text-base font-bold font-mono text-stone-900 mt-0.5">
+                Base Currency: <span className="text-emerald-700 font-extrabold">{CURRENCIES[base]?.flag} {base}</span>
+                <span className="text-xs font-normal text-stone-500 ml-2">({CURRENCIES[base]?.name})</span>
               </h2>
             </div>
           </div>
 
           {/* Quick Base Currency Switcher Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-            <span className="text-[11px] font-mono text-slate-400 mr-1 hidden sm:inline uppercase tracking-wider">Set Base:</span>
+            <span className="text-[11px] font-mono text-stone-500 mr-1 hidden sm:inline uppercase tracking-wider font-semibold">
+              Set Base:
+            </span>
             {MAJOR_PAIRS.map((curr) => {
               const meta = CURRENCIES[curr];
               const isCurrent = base === curr;
@@ -132,8 +136,8 @@ export default function App() {
                   }}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${
                     isCurrent
-                      ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_0_15px_rgba(16,185,129,0.35)]'
-                      : 'bg-white/[0.03] text-slate-300 hover:text-white border border-white/[0.08] hover:border-white/20'
+                      ? 'bg-stone-900 text-white font-bold shadow-xs'
+                      : 'bg-white/80 text-stone-700 hover:text-stone-900 border border-[#ded5c6] hover:border-stone-400'
                   }`}
                 >
                   <span>{meta?.flag}</span>
@@ -152,7 +156,7 @@ export default function App() {
           activeStats={timeSeriesData?.stats}
         />
 
-        {/* 2. Upgraded Interactive Chart Section (Spline Wave + Daily Delta Momentum) */}
+        {/* 2. Interactive Chart Section (Spline Wave + Daily Delta Momentum) */}
         <ChartSection
           base={base}
           target={target}
@@ -178,7 +182,7 @@ export default function App() {
           onSelectPair={handleSelectPair}
         />
 
-        {/* 5. Comprehensive Directory / Table of all 30+ Currencies with Micro Sparklines */}
+        {/* 5. Comprehensive Directory / Table of all 30+ Currencies */}
         <RatesTable
           rates={latestData?.rates}
           base={base}
